@@ -8,24 +8,38 @@ import androidx.appcompat.app.AppCompatActivity
 class MainActivity : AppCompatActivity() {
 
     private val clickPoints = mutableListOf<ClickPoint>()
+    private val maxPoints = 10
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val statusText = findViewById<TextView>(R.id.statusText)
-        val testButton = findViewById<Button>(R.id.testButton)
+        val addPointButton = findViewById<Button>(R.id.addPointButton)
 
-        clickPoints.add(ClickPoint(1, 300, 500, 1000, 100))
-        clickPoints.add(ClickPoint(2, 600, 800, 500, 80))
+        updateStatus(statusText)
 
-        testButton.setOnClickListener {
-            val totalPoints = clickPoints.size
-            val firstPoint = clickPoints[0]
+        addPointButton.setOnClickListener {
+            if (clickPoints.size >= maxPoints) {
+                statusText.text = "已達上限，最多只能新增 $maxPoints 個點位"
+                return@setOnClickListener
+            }
 
-            statusText.text =
-                "目前共有 $totalPoints 個點\n" +
-                "第一點座標=(${firstPoint.x}, ${firstPoint.y})"
+            val newId = clickPoints.size + 1
+            val newPoint = ClickPoint(
+                id = newId,
+                x = 100 * newId,
+                y = 150 * newId,
+                delay = 500,
+                duration = 100
+            )
+
+            clickPoints.add(newPoint)
+            updateStatus(statusText)
         }
+    }
+
+    private fun updateStatus(statusText: TextView) {
+        statusText.text = "目前點位數：${clickPoints.size}"
     }
 }

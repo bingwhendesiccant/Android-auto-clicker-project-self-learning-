@@ -18,14 +18,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="目前狀態：尚未開始"
+        android:text="目前點位數：0"
         android:textSize="18sp" />
 
     <Button
-        android:id="@+id/testButton"
+        android:id="@+id/addPointButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="測試按鈕" />
+        android:text="新增點位" />
 
 </LinearLayout>
