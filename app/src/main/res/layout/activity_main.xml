@@ -34,4 +34,10 @@
         android:layout_marginTop="16dp"
         android:text="(尚無點位資料)"
         android:textSize="16sp" />
+    <Button
+        android:id="@+id/removePointButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="刪除最後一個點位" />
 </LinearLayout>

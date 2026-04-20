@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
         val statusText = findViewById<TextView>(R.id.statusText)
         val addPointButton = findViewById<Button>(R.id.addPointButton)
         val listText = findViewById<TextView>(R.id.listText)
+        val removePointButton = findViewById<Button>(R.id.removePointButton)
 
         updateStatus(statusText, listText)
 
@@ -36,6 +37,18 @@ class MainActivity : AppCompatActivity() {
             )
 
             clickPoints.add(newPoint)
+            updateStatus(statusText, listText)
+        }
+
+        removePointButton.setOnClickListener {
+
+            if (clickPoints.isEmpty()) {
+                statusText.text = "沒有點位可以刪除"
+                return@setOnClickListener
+            }
+
+            clickPoints.removeAt(clickPoints.size - 1)
+
             updateStatus(statusText, listText)
         }
     }
