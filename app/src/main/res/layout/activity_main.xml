@@ -40,4 +40,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="刪除最後一個點位" />
+    <Button
+        android:id="@+id/removeIdButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="刪除 ID=2" />
 </LinearLayout>

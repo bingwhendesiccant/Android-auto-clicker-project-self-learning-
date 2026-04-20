@@ -51,6 +51,25 @@ class MainActivity : AppCompatActivity() {
 
             updateStatus(statusText, listText)
         }
+        val removeIdButton = findViewById<Button>(R.id.removeIdButton)
+
+        removeIdButton.setOnClickListener {
+
+            val targetId = 2
+
+            val index = clickPoints.indexOfFirst { it.id == targetId }
+
+            if (index == -1) {
+                statusText.text = "找不到 ID=$targetId 的點位"
+                return@setOnClickListener
+            }
+
+            clickPoints.removeAt(index)
+
+            statusText.text = "已刪除 ID=$targetId 的點位"
+
+            updateStatus(statusText, listText)
+        }
     }
 
     private fun updateStatus(statusText: TextView, listText: TextView) {
