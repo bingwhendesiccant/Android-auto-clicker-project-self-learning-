@@ -27,5 +27,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="新增點位" />
-
+    <TextView
+        android:id="@+id/listText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="(尚無點位資料)"
+        android:textSize="16sp" />
 </LinearLayout>

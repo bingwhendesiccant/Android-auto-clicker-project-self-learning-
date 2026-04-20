@@ -16,8 +16,9 @@ class MainActivity : AppCompatActivity() {
 
         val statusText = findViewById<TextView>(R.id.statusText)
         val addPointButton = findViewById<Button>(R.id.addPointButton)
+        val listText = findViewById<TextView>(R.id.listText)
 
-        updateStatus(statusText)
+        updateStatus(statusText, listText)
 
         addPointButton.setOnClickListener {
             if (clickPoints.size >= maxPoints) {
@@ -35,11 +36,27 @@ class MainActivity : AppCompatActivity() {
             )
 
             clickPoints.add(newPoint)
-            updateStatus(statusText)
+            updateStatus(statusText, listText)
         }
     }
 
-    private fun updateStatus(statusText: TextView) {
+    private fun updateStatus(statusText: TextView, listText: TextView) {
         statusText.text = "目前點位數：${clickPoints.size}"
+
+        if (clickPoints.isEmpty()) {
+            listText.text = "(尚無點位資料)"
+            return
+        }
+
+        val builder = StringBuilder()
+
+        for (point in clickPoints) {
+            builder.append(
+                "#${point.id} (${point.x}, ${point.y}) " +
+                        "delay=${point.delay} duration=${point.duration}\n"
+            )
+        }
+
+        listText.text = builder.toString()
     }
 }
