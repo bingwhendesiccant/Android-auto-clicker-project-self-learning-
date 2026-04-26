@@ -3,6 +3,7 @@ package com.bingze.autoclickerdemo
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -51,11 +52,25 @@ class MainActivity : AppCompatActivity() {
 
             updateStatus(statusText, listText)
         }
-        val removeIdButton = findViewById<Button>(R.id.removeIdButton)
 
-        removeIdButton.setOnClickListener {
 
-            val targetId = 2
+        val removeIdInput = findViewById<EditText>(R.id.removeIdInput)
+        val removeByIdButton = findViewById<Button>(R.id.removeByIdButton)
+
+        removeByIdButton.setOnClickListener {
+            val inputText = removeIdInput.text.toString()
+
+            if (inputText.isBlank()) {
+                statusText.text = "請先輸入要刪除的點位 ID"
+                return@setOnClickListener
+            }
+
+            val targetId = inputText.toIntOrNull()
+
+            if (targetId == null) {
+                statusText.text = "請輸入有效的數字 ID"
+                return@setOnClickListener
+            }
 
             val index = clickPoints.indexOfFirst { it.id == targetId }
 
@@ -65,9 +80,10 @@ class MainActivity : AppCompatActivity() {
             }
 
             clickPoints.removeAt(index)
+            reorderIds()
 
             statusText.text = "已刪除 ID=$targetId 的點位"
-
+            removeIdInput.text.clear()
             updateStatus(statusText, listText)
         }
     }
@@ -90,5 +106,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         listText.text = builder.toString()
+    }
+    private fun reorderIds() {
+        for (i in clickPoints.indices) {
+            clickPoints[i] = clickPoints[i].copy(id = i + 1)
+        }
     }
 }

@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="新增點位" />
+
     <TextView
         android:id="@+id/listText"
         android:layout_width="match_parent"
@@ -34,15 +35,26 @@
         android:layout_marginTop="16dp"
         android:text="(尚無點位資料)"
         android:textSize="16sp" />
+
     <Button
         android:id="@+id/removePointButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="刪除最後一個點位" />
+
+    <EditText
+        android:id="@+id/removeIdInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="輸入要刪除的點位 ID"
+        android:inputType="number" />
+
     <Button
-        android:id="@+id/removeIdButton"
+        android:id="@+id/removeByIdButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="刪除 ID=2" />
+        android:layout_marginTop="12dp"
+        android:text="刪除指定 ID 點位" />
 </LinearLayout>
