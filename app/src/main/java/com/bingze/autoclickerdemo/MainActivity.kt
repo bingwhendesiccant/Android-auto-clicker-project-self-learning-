@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
         val listText = findViewById<TextView>(R.id.listText)
         val removePointButton = findViewById<Button>(R.id.removePointButton)
 
+
         updateStatus(statusText, listText)
 
         addPointButton.setOnClickListener {
@@ -31,8 +32,8 @@ class MainActivity : AppCompatActivity() {
             val newId = clickPoints.size + 1
             val newPoint = ClickPoint(
                 id = newId,
-                x = 100 * newId,
-                y = 150 * newId,
+                xRatio = 0.1f * newId,
+                yRatio = 0.1f * newId,
                 delay = 500,
                 duration = 100
             )
@@ -86,6 +87,8 @@ class MainActivity : AppCompatActivity() {
             removeIdInput.text.clear()
             updateStatus(statusText, listText)
         }
+
+
     }
 
     private fun updateStatus(statusText: TextView, listText: TextView) {
@@ -99,8 +102,17 @@ class MainActivity : AppCompatActivity() {
         val builder = StringBuilder()
 
         for (point in clickPoints) {
+
+            val metrics = resources.displayMetrics
+            val width = metrics.widthPixels
+            val height = metrics.heightPixels
+            val realX = (point.xRatio * width).toInt()
+            val realY = (point.yRatio * height).toInt()
+
             builder.append(
-                "#${point.id} (${point.x}, ${point.y}) " +
+                "#${point.id} " +
+                        "(ratio=${"%.2f".format(point.xRatio)}, ${"%.2f".format(point.yRatio)}) " +
+                        "→ ($realX, $realY) " +
                         "delay=${point.delay} duration=${point.duration}\n"
             )
         }
