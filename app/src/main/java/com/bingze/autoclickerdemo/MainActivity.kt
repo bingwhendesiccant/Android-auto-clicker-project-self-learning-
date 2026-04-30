@@ -19,7 +19,9 @@ class MainActivity : AppCompatActivity() {
         val addPointButton = findViewById<Button>(R.id.addPointButton)
         val listText = findViewById<TextView>(R.id.listText)
         val removePointButton = findViewById<Button>(R.id.removePointButton)
-
+        val editButtonUp = findViewById<Button>(R.id.EditButtonUp)
+        val editButtonDown = findViewById<Button>(R.id.EditButtonDown)
+        val chooseText = findViewById<TextView>(R.id.ChooseButton)
 
         updateStatus(statusText, listText)
 
@@ -39,7 +41,9 @@ class MainActivity : AppCompatActivity() {
             )
 
             clickPoints.add(newPoint)
+            selectedPointIndex = clickPoints.size - 1
             updateStatus(statusText, listText)
+            updateSelectedPoint(chooseText)
         }
 
         removePointButton.setOnClickListener {
@@ -51,7 +55,45 @@ class MainActivity : AppCompatActivity() {
 
             clickPoints.removeAt(clickPoints.size - 1)
 
+            if (selectedPointIndex >= clickPoints.size) {
+                selectedPointIndex = clickPoints.size - 1
+            }
+
             updateStatus(statusText, listText)
+            updateSelectedPoint(chooseText)
+
+        }
+
+        editButtonUp.setOnClickListener {
+            if (clickPoints.isEmpty()) {
+                statusText.text = "目前沒有點位可以選擇"
+                updateSelectedPoint(chooseText)
+                return@setOnClickListener
+            }
+
+            selectedPointIndex--
+
+            if (selectedPointIndex < 0) {
+                selectedPointIndex = clickPoints.size - 1
+            }
+
+            updateSelectedPoint(chooseText)
+        }
+
+        editButtonDown.setOnClickListener {
+            if (clickPoints.isEmpty()) {
+                statusText.text = "目前沒有點位可以選擇"
+                updateSelectedPoint(chooseText)
+                return@setOnClickListener
+            }
+
+            selectedPointIndex++
+
+            if (selectedPointIndex >= clickPoints.size) {
+                selectedPointIndex = 0
+            }
+
+            updateSelectedPoint(chooseText)
         }
 
 
@@ -83,13 +125,19 @@ class MainActivity : AppCompatActivity() {
             clickPoints.removeAt(index)
             reorderIds()
 
+            if (selectedPointIndex >= clickPoints.size) {
+                selectedPointIndex = clickPoints.size - 1
+            }
+
             statusText.text = "已刪除 ID=$targetId 的點位"
             removeIdInput.text.clear()
             updateStatus(statusText, listText)
+            updateSelectedPoint(chooseText)
         }
 
 
     }
+    private var selectedPointIndex = 0
 
     private fun updateStatus(statusText: TextView, listText: TextView) {
         statusText.text = "目前點位數：${clickPoints.size}"
@@ -99,13 +147,14 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
+        val metrics = resources.displayMetrics
+        val width = metrics.widthPixels
+        val height = metrics.heightPixels
+
         val builder = StringBuilder()
 
         for (point in clickPoints) {
 
-            val metrics = resources.displayMetrics
-            val width = metrics.widthPixels
-            val height = metrics.heightPixels
             val realX = (point.xRatio * width).toInt()
             val realY = (point.yRatio * height).toInt()
 
@@ -123,5 +172,27 @@ class MainActivity : AppCompatActivity() {
         for (i in clickPoints.indices) {
             clickPoints[i] = clickPoints[i].copy(id = i + 1)
         }
+    }
+    private fun updateSelectedPoint(chooseText: TextView) {
+        if (clickPoints.isEmpty()) {
+            chooseText.text = "目前選定：無"
+            selectedPointIndex = 0
+            return
+        }
+
+        if (selectedPointIndex >= clickPoints.size) {
+            selectedPointIndex = clickPoints.size - 1
+        }
+
+        if (selectedPointIndex < 0) {
+            selectedPointIndex = 0
+        }
+
+        val point = clickPoints[selectedPointIndex]
+
+        chooseText.text =
+            "目前選定：#${point.id}\n" +
+                    "ratio=(${"%.2f".format(point.xRatio)}, ${"%.2f".format(point.yRatio)})\n" +
+                    "delay=${point.delay} duration=${point.duration}"
     }
 }
