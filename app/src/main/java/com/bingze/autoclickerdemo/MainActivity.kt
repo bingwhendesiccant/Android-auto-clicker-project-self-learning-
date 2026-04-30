@@ -22,6 +22,11 @@ class MainActivity : AppCompatActivity() {
         val editButtonUp = findViewById<Button>(R.id.EditButtonUp)
         val editButtonDown = findViewById<Button>(R.id.EditButtonDown)
         val chooseText = findViewById<TextView>(R.id.ChooseButton)
+        val editXRatioInput = findViewById<EditText>(R.id.editXRatioInput)
+        val editYRatioInput = findViewById<EditText>(R.id.editYRatioInput)
+        val editDelayInput = findViewById<EditText>(R.id.editDelayInput)
+        val editDurationInput = findViewById<EditText>(R.id.editDurationInput)
+        val applyEditButton = findViewById<Button>(R.id.applyEditButton)
 
         updateStatus(statusText, listText)
 
@@ -93,6 +98,47 @@ class MainActivity : AppCompatActivity() {
                 selectedPointIndex = 0
             }
 
+            updateSelectedPoint(chooseText)
+        }
+
+        applyEditButton.setOnClickListener {
+            if (clickPoints.isEmpty()) {
+                statusText.text = "目前沒有點位可以修改"
+                updateSelectedPoint(chooseText)
+                return@setOnClickListener
+            }
+
+            val newXRatio = editXRatioInput.text.toString().toFloatOrNull()
+            val newYRatio = editYRatioInput.text.toString().toFloatOrNull()
+            val newDelay = editDelayInput.text.toString().toLongOrNull()
+            val newDuration = editDurationInput.text.toString().toLongOrNull()
+
+            if (newXRatio == null || newYRatio == null || newDelay == null || newDuration == null) {
+                statusText.text = "請完整輸入有效數值"
+                return@setOnClickListener
+            }
+
+            if (newXRatio < 0f || newXRatio > 1f || newYRatio < 0f || newYRatio > 1f) {
+                statusText.text = "xRatio / yRatio 必須介於 0 到 1 之間"
+                return@setOnClickListener
+            }
+
+            if (newDelay < 0 || newDuration <= 0) {
+                statusText.text = "delay 不可小於 0，duration 必須大於 0"
+                return@setOnClickListener
+            }
+
+            val oldPoint = clickPoints[selectedPointIndex]
+
+            clickPoints[selectedPointIndex] = oldPoint.copy(
+                xRatio = newXRatio,
+                yRatio = newYRatio,
+                delay = newDelay,
+                duration = newDuration
+            )
+
+            statusText.text = "已修改 ID=${oldPoint.id} 的點位"
+            updateStatus(statusText, listText)
             updateSelectedPoint(chooseText)
         }
 

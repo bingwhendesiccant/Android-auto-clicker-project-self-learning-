@@ -57,6 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="刪除指定 ID 點位" />
+
     <Button
         android:id="@+id/EditButtonUp"
         android:layout_width="wrap_content"
@@ -78,4 +79,43 @@
         android:layout_marginTop="16dp"
         android:text="(尚無點位資料)"
         android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/editXRatioInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="輸入 xRatio，例如 0.5"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/editYRatioInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="輸入 yRatio，例如 0.5"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/editDelayInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="輸入 delay 毫秒，例如 500"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/editDurationInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="輸入 duration 毫秒，例如 100"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/applyEditButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="套用修改" />
 </LinearLayout>
