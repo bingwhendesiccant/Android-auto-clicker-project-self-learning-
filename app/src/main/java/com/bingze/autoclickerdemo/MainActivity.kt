@@ -5,6 +5,8 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import org.json.JSONArray
+import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,9 +18,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val statusText = findViewById<TextView>(R.id.statusText)
-        val addPointButton = findViewById<Button>(R.id.addPointButton)
         val listText = findViewById<TextView>(R.id.listText)
+        val addPointButton = findViewById<Button>(R.id.addPointButton)
         val removePointButton = findViewById<Button>(R.id.removePointButton)
+
         val editButtonUp = findViewById<Button>(R.id.EditButtonUp)
         val editButtonDown = findViewById<Button>(R.id.EditButtonDown)
         val chooseText = findViewById<TextView>(R.id.ChooseButton)
@@ -28,7 +31,13 @@ class MainActivity : AppCompatActivity() {
         val editDurationInput = findViewById<EditText>(R.id.editDurationInput)
         val applyEditButton = findViewById<Button>(R.id.applyEditButton)
 
+        val savePointsButton = findViewById<Button>(R.id.savePointsButton)
+        val loadPointsButton = findViewById<Button>(R.id.loadPointsButton)
+
+        loadClickPoints()
         updateStatus(statusText, listText)
+        updateSelectedPoint(chooseText)
+        //load preset points from memory
 
         addPointButton.setOnClickListener {
             if (clickPoints.size >= maxPoints) {
@@ -142,6 +151,26 @@ class MainActivity : AppCompatActivity() {
             updateSelectedPoint(chooseText)
         }
 
+        savePointsButton.setOnClickListener {
+            saveClickPoints()
+            statusText.text = "已儲存目前點位設定"
+        }
+
+        loadPointsButton.setOnClickListener {
+            loadClickPoints()
+
+            if (selectedPointIndex >= clickPoints.size) {
+                selectedPointIndex = clickPoints.size - 1
+            }
+
+            if (selectedPointIndex < 0) {
+                selectedPointIndex = 0
+            }
+
+            updateStatus(statusText, listText)
+            updateSelectedPoint(chooseText)
+            statusText.text = "已讀取點位設定"
+        }
 
         val removeIdInput = findViewById<EditText>(R.id.removeIdInput)
         val removeByIdButton = findViewById<Button>(R.id.removeByIdButton)
@@ -240,5 +269,57 @@ class MainActivity : AppCompatActivity() {
             "目前選定：#${point.id}\n" +
                     "ratio=(${"%.2f".format(point.xRatio)}, ${"%.2f".format(point.yRatio)})\n" +
                     "delay=${point.delay} duration=${point.duration}"
+    }
+    private fun saveClickPoints() {
+        val jsonArray = JSONArray()
+
+        for (point in clickPoints) {
+            val jsonObject = JSONObject()
+
+            jsonObject.put("id", point.id)
+            jsonObject.put("xRatio", point.xRatio)
+            jsonObject.put("yRatio", point.yRatio)
+            jsonObject.put("delay", point.delay)
+            jsonObject.put("duration", point.duration)
+
+            jsonArray.put(jsonObject)
+        }
+
+        val sharedPreferences = getSharedPreferences("click_point_storage", MODE_PRIVATE)
+
+        sharedPreferences.edit()
+            .putString("click_points", jsonArray.toString())
+            .apply()
+    }
+    private fun loadClickPoints() {
+        val sharedPreferences = getSharedPreferences("click_point_storage", MODE_PRIVATE)
+        val jsonString = sharedPreferences.getString("click_points", null)
+
+        if (jsonString == null) {
+            clickPoints.clear()
+            selectedPointIndex = 0
+            return
+        }
+
+        val jsonArray = JSONArray(jsonString)
+
+        clickPoints.clear()
+
+        for (i in 0 until jsonArray.length()) {
+            val jsonObject = jsonArray.getJSONObject(i)
+
+            val point = ClickPoint(
+                id = jsonObject.getInt("id"),
+                xRatio = jsonObject.getDouble("xRatio").toFloat(),
+                yRatio = jsonObject.getDouble("yRatio").toFloat(),
+                delay = jsonObject.getLong("delay"),
+                duration = jsonObject.getLong("duration")
+            )
+
+            clickPoints.add(point)
+        }
+
+        reorderIds()
+        selectedPointIndex = 0
     }
 }
