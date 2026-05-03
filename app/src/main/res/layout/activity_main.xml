@@ -167,18 +167,27 @@
                 android:text="檢查無障礙權限狀態" />
 
             <Button
-                android:id="@+id/testClickSelectedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="測試點擊選定點位" />
-
-            <Button
                 android:id="@+id/runClickSequenceButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:text="執行點位清單" />
+
+            <EditText
+                android:id="@+id/repeatCountInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="輸入執行輪數，例如 3"
+                android:inputType="number" />
+
+            <Button
+                android:id="@+id/stopClickSequenceButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="停止執行" />
+
         </LinearLayout>
 
     </LinearLayout>

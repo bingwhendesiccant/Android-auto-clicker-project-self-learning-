@@ -18,6 +18,10 @@ class MainActivity : AppCompatActivity() {
     private val clickPoints = mutableListOf<ClickPoint>()
     private val maxPoints = 10
 
+    private var isRunning = false
+    private var currentRepeat = 0
+    private var totalRepeat = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -49,10 +53,14 @@ class MainActivity : AppCompatActivity() {
         val checkAccessibilityButton =
             findViewById<Button>(R.id.checkAccessibilityButton)
 
-        val testClickSelectedButton =
-            findViewById<Button>(R.id.testClickSelectedButton)
+        //val testClickSelectedButton =
+        //    findViewById<Button>(R.id.testClickSelectedButton)
         val runClickSequenceButton =
             findViewById<Button>(R.id.runClickSequenceButton)
+
+        val repeatCountInput = findViewById<EditText>(R.id.repeatCountInput)
+        val stopClickSequenceButton =
+            findViewById<Button>(R.id.stopClickSequenceButton)
 
         loadClickPoints()
         updateStatus(statusText, listText)
@@ -241,6 +249,7 @@ class MainActivity : AppCompatActivity() {
             updateAccessibilityStatus(accessibilityStatusText)
         }
 
+        /*
         testClickSelectedButton.setOnClickListener {
             if (!isAccessibilityServiceEnabled()) {
                 statusText.text = "請先啟用無障礙權限"
@@ -272,8 +281,14 @@ class MainActivity : AppCompatActivity() {
 
             statusText.text = "已測試點擊 ID=${point.id}：($realX, $realY)"
         }
+        */
 
         runClickSequenceButton.setOnClickListener {
+            if (isRunning) {
+                statusText.text = "點位清單正在執行中，請先停止或等待完成"
+                return@setOnClickListener
+            }
+
             if (!isAccessibilityServiceEnabled()) {
                 statusText.text = "請先啟用無障礙權限"
                 return@setOnClickListener
@@ -291,8 +306,29 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            statusText.text = "開始執行點位清單"
+            val inputRepeat = repeatCountInput.text.toString().toIntOrNull()
+
+            if (inputRepeat == null || inputRepeat <= 0) {
+                statusText.text = "請輸入有效的執行輪數"
+                return@setOnClickListener
+            }
+
+            totalRepeat = inputRepeat
+            currentRepeat = 1
+            isRunning = true
+
+            statusText.text = "開始執行點位清單，共 $totalRepeat 輪"
             runClickSequence(0, service, statusText)
+        }
+
+        stopClickSequenceButton.setOnClickListener {
+            if (!isRunning) {
+                statusText.text = "目前沒有正在執行的點位清單"
+                return@setOnClickListener
+            }
+
+            isRunning = false
+            statusText.text = "已停止執行"
         }
 
     }
@@ -441,8 +477,21 @@ class MainActivity : AppCompatActivity() {
         service: AutoClickService,
         statusText: TextView
     ) {
+        if (!isRunning) {
+            statusText.text = "執行已停止"
+            return
+        }
+
         if (index >= clickPoints.size) {
-            statusText.text = "點位清單執行完成"
+            if (currentRepeat >= totalRepeat) {
+                isRunning = false
+                statusText.text = "點位清單執行完成，共執行 $totalRepeat 輪"
+                return
+            }
+
+            currentRepeat++
+            statusText.text = "開始第 $currentRepeat / $totalRepeat 輪"
+            runClickSequence(0, service, statusText)
             return
         }
 
@@ -455,10 +504,17 @@ class MainActivity : AppCompatActivity() {
         val realX = (point.xRatio * width).toInt()
         val realY = (point.yRatio * height).toInt()
 
-        statusText.text = "準備執行 ID=${point.id}：delay=${point.delay}ms"
+        statusText.text =
+            "第 $currentRepeat / $totalRepeat 輪，準備執行 ID=${point.id}：delay=${point.delay}ms"
 
         Handler(Looper.getMainLooper()).postDelayed({
-            statusText.text = "正在點擊 ID=${point.id}：($realX, $realY)"
+            if (!isRunning) {
+                statusText.text = "執行已停止"
+                return@postDelayed
+            }
+
+            statusText.text =
+                "第 $currentRepeat / $totalRepeat 輪，正在點擊 ID=${point.id}：($realX, $realY)"
 
             service.performClick(realX, realY, point.duration) {
                 runClickSequence(index + 1, service, statusText)
