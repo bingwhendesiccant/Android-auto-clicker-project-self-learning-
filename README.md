@@ -113,7 +113,7 @@ Create click points
 → Run the click sequence with repeat and stop controls
 
 Overlay controls and draggable point markers are intentionally postponed to later stages because they require additional WindowManager and overlay permission handling.
-
+```
 Future Plans
 
 Planned next steps include:
@@ -128,4 +128,4 @@ Support swipe gestures
 Improve handling of screen rotation and different display environments
 Author
 
-Developed by bingwhendescicant```
+Developed by bingwhendescicant
