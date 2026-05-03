@@ -9,7 +9,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import android.content.Intent
 import android.provider.Settings
-
+import android.text.TextUtils
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,10 +40,19 @@ class MainActivity : AppCompatActivity() {
         val openAccessibilitySettingsButton =
             findViewById<Button>(R.id.openAccessibilitySettingsButton)
 
+        val expectedServiceName =
+            "$packageName/${AutoClickService::class.java.name}"
+        val accessibilityStatusText =
+            findViewById<TextView>(R.id.accessibilityStatusText)
+        val checkAccessibilityButton =
+            findViewById<Button>(R.id.checkAccessibilityButton)
+
         loadClickPoints()
         updateStatus(statusText, listText)
         updateSelectedPoint(chooseText)
         //load preset points from memory
+        updateAccessibilityStatus(accessibilityStatusText)
+        //ensure get access while open app
 
         addPointButton.setOnClickListener {
             if (clickPoints.size >= maxPoints) {
@@ -221,6 +230,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        checkAccessibilityButton.setOnClickListener {
+            updateAccessibilityStatus(accessibilityStatusText)
+        }
+
 
     }
     private var selectedPointIndex = 0
@@ -332,5 +345,34 @@ class MainActivity : AppCompatActivity() {
 
         reorderIds()
         selectedPointIndex = 0
+    }
+    private fun isAccessibilityServiceEnabled(): Boolean {
+        val expectedServiceName =
+            "$packageName/${AutoClickService::class.java.name}"
+
+        val enabledServices = Settings.Secure.getString(
+            contentResolver,
+            Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+        ) ?: return false
+
+        val splitter = TextUtils.SimpleStringSplitter(':')
+        splitter.setString(enabledServices)
+
+        while (splitter.hasNext()) {
+            val serviceName = splitter.next()
+
+            if (serviceName.equals(expectedServiceName, ignoreCase = true)) {
+                return true
+            }
+        }
+
+        return false
+    }
+    private fun updateAccessibilityStatus(statusText: TextView) {
+        if (isAccessibilityServiceEnabled()) {
+            statusText.text = "無障礙權限：已啟用"
+        } else {
+            statusText.text = "無障礙權限：未啟用"
+        }
     }
 }
