@@ -127,5 +127,7 @@ Planned next steps include:
 7. Support swipe gestures
 8. Improve handling of screen rotation and different display environments
 
-Author
+## Author
+- bingwhendescicant
+
 Developed by bingwhendescicant
