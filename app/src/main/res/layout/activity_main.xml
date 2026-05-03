@@ -9,186 +9,269 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <TextView
+            android:id="@+id/titleText"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="24dp">
+            android:layout_height="wrap_content"
+            android:text="Auto Clicker Demo"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/titleText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Auto Clicker Demo"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="目前點位數：0"
+            android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/statusText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="目前點位數：0"
-                android:textSize="18sp" />
+        <!-- 點位管理 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="點位管理"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/addPointButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="新增點位" />
-
-            <TextView
-                android:id="@+id/listText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="(尚無點位資料)"
-                android:textSize="16sp" />
+                android:layout_weight="1"
+                android:text="新增" />
 
             <Button
                 android:id="@+id/removePointButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="刪除最後一個點位" />
-
-            <EditText
-                android:id="@+id/removeIdInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:hint="輸入要刪除的點位 ID"
-                android:inputType="number" />
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="刪最後" />
 
             <Button
-                android:id="@+id/removeByIdButton"
-                android:layout_width="wrap_content"
+                android:id="@+id/clearPointsButton"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="刪除指定 ID 點位" />
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="清除" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/removeIdInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="輸入要刪除的點位 ID"
+            android:inputType="number" />
+
+        <Button
+            android:id="@+id/removeByIdButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="刪除指定 ID 點位" />
+
+        <TextView
+            android:id="@+id/listText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="(尚無點位資料)"
+            android:textSize="14sp" />
+
+        <!-- 選定與編輯 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="選定與編輯"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/EditButtonUp"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="ID選擇向上" />
+                android:layout_weight="1"
+                android:text="上一個" />
 
             <Button
                 android:id="@+id/EditButtonDown"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="ID選擇向下" />
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="下一個" />
+        </LinearLayout>
 
-            <TextView
-                android:id="@+id/ChooseButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="(尚無點位資料)"
-                android:textSize="16sp" />
+        <TextView
+            android:id="@+id/ChooseButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="目前選定：無"
+            android:textSize="14sp" />
 
-            <EditText
-                android:id="@+id/editXRatioInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:hint="輸入 xRatio，例如 0.5"
-                android:inputType="numberDecimal" />
+        <EditText
+            android:id="@+id/editXRatioInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="xRatio，例如 0.5"
+            android:inputType="numberDecimal" />
 
-            <EditText
-                android:id="@+id/editYRatioInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:hint="輸入 yRatio，例如 0.5"
-                android:inputType="numberDecimal" />
+        <EditText
+            android:id="@+id/editYRatioInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="yRatio，例如 0.5"
+            android:inputType="numberDecimal" />
 
-            <EditText
-                android:id="@+id/editDelayInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:hint="輸入 delay 毫秒，例如 500"
-                android:inputType="number" />
+        <EditText
+            android:id="@+id/editDelayInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="delay 毫秒，例如 500"
+            android:inputType="number" />
 
-            <EditText
-                android:id="@+id/editDurationInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:hint="輸入 duration 毫秒，例如 100"
-                android:inputType="number" />
+        <EditText
+            android:id="@+id/editDurationInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="duration 毫秒，例如 100"
+            android:inputType="number" />
 
-            <Button
-                android:id="@+id/applyEditButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="套用修改" />
+        <Button
+            android:id="@+id/applyEditButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="套用修改" />
+
+        <!-- 儲存與讀取 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="儲存與讀取"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/savePointsButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="儲存點位設定" />
+                android:layout_weight="1"
+                android:text="儲存" />
 
             <Button
                 android:id="@+id/loadPointsButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="讀取點位設定" />
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="讀取" />
+        </LinearLayout>
+
+        <!-- 權限與執行 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="權限與執行"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/accessibilityStatusText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="無障礙權限：尚未檢查"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/openAccessibilitySettingsButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="開啟無障礙設定" />
-
-            <TextView
-                android:id="@+id/accessibilityStatusText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="無障礙權限：尚未檢查"
-                android:textSize="16sp" />
+                android:layout_weight="1"
+                android:text="開啟設定" />
 
             <Button
                 android:id="@+id/checkAccessibilityButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="檢查無障礙權限狀態" />
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="檢查權限" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/repeatCountInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="輸入執行輪數，例如 3"
+            android:inputType="number" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/runClickSequenceButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="執行點位清單" />
-
-            <EditText
-                android:id="@+id/repeatCountInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:hint="輸入執行輪數，例如 3"
-                android:inputType="number" />
+                android:layout_weight="1"
+                android:text="執行" />
 
             <Button
                 android:id="@+id/stopClickSequenceButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="停止執行" />
-
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="停止" />
         </LinearLayout>
+
+        <!-- 如果你已經把單點測試 listener 註解掉，可以暫時保留這顆按鈕，也可以整段刪掉 -->
+        <Button
+            android:id="@+id/testClickSelectedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="測試點擊選定點位" />
 
     </LinearLayout>
 
