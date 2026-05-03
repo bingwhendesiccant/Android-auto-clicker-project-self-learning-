@@ -7,6 +7,9 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import org.json.JSONArray
 import org.json.JSONObject
+import android.content.Intent
+import android.provider.Settings
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,6 +36,9 @@ class MainActivity : AppCompatActivity() {
 
         val savePointsButton = findViewById<Button>(R.id.savePointsButton)
         val loadPointsButton = findViewById<Button>(R.id.loadPointsButton)
+
+        val openAccessibilitySettingsButton =
+            findViewById<Button>(R.id.openAccessibilitySettingsButton)
 
         loadClickPoints()
         updateStatus(statusText, listText)
@@ -208,6 +214,11 @@ class MainActivity : AppCompatActivity() {
             removeIdInput.text.clear()
             updateStatus(statusText, listText)
             updateSelectedPoint(chooseText)
+        }
+
+        openAccessibilitySettingsButton.setOnClickListener {
+            val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+            startActivity(intent)
         }
 
 

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AutoClickerDemo</string>
+    <string name="accessibility_service_description">用於執行使用者設定的點擊動作</string>
 </resources>
