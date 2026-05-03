@@ -114,7 +114,7 @@ Create click points
 
 Overlay controls and draggable point markers are intentionally postponed to later stages because they require additional WindowManager and overlay permission handling.
 ```
-Future Plans
+## Future Plans
 
 Planned next steps include:
 
