@@ -4,7 +4,7 @@ import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.GestureDescription
 import android.graphics.Path
 import android.view.accessibility.AccessibilityEvent
-
+import android.accessibilityservice.AccessibilityService.GestureResultCallback
 class AutoClickService : AccessibilityService() {
 
     companion object {
@@ -31,7 +31,12 @@ class AutoClickService : AccessibilityService() {
         }
     }
 
-    fun performClick(x: Int, y: Int, duration: Long) {
+    fun performClick(
+        x: Int,
+        y: Int,
+        duration: Long,
+        onComplete: (() -> Unit)? = null
+    ) {
         val path = Path().apply {
             moveTo(x.toFloat(), y.toFloat())
         }
@@ -46,6 +51,20 @@ class AutoClickService : AccessibilityService() {
             )
             .build()
 
-        dispatchGesture(gesture, null, null)
+        dispatchGesture(
+            gesture,
+            object : GestureResultCallback() {
+                override fun onCompleted(gestureDescription: GestureDescription?) {
+                    super.onCompleted(gestureDescription)
+                    onComplete?.invoke()
+                }
+
+                override fun onCancelled(gestureDescription: GestureDescription?) {
+                    super.onCancelled(gestureDescription)
+                    onComplete?.invoke()
+                }
+            },
+            null
+        )
     }
 }

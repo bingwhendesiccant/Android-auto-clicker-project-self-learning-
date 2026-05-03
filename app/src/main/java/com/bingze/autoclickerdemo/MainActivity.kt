@@ -10,8 +10,8 @@ import org.json.JSONObject
 import android.content.Intent
 import android.provider.Settings
 import android.text.TextUtils
-import android.accessibilityservice.GestureDescription
-import android.graphics.Path
+import android.os.Handler
+import android.os.Looper
 
 class MainActivity : AppCompatActivity() {
 
@@ -51,6 +51,8 @@ class MainActivity : AppCompatActivity() {
 
         val testClickSelectedButton =
             findViewById<Button>(R.id.testClickSelectedButton)
+        val runClickSequenceButton =
+            findViewById<Button>(R.id.runClickSequenceButton)
 
         loadClickPoints()
         updateStatus(statusText, listText)
@@ -271,6 +273,28 @@ class MainActivity : AppCompatActivity() {
             statusText.text = "已測試點擊 ID=${point.id}：($realX, $realY)"
         }
 
+        runClickSequenceButton.setOnClickListener {
+            if (!isAccessibilityServiceEnabled()) {
+                statusText.text = "請先啟用無障礙權限"
+                return@setOnClickListener
+            }
+
+            if (clickPoints.isEmpty()) {
+                statusText.text = "目前沒有點位可以執行"
+                return@setOnClickListener
+            }
+
+            val service = AutoClickService.instance
+
+            if (service == null) {
+                statusText.text = "無障礙服務尚未連線，請重新開啟服務或重啟 App"
+                return@setOnClickListener
+            }
+
+            statusText.text = "開始執行點位清單"
+            runClickSequence(0, service, statusText)
+        }
+
     }
     private var selectedPointIndex = 0
 
@@ -410,5 +434,35 @@ class MainActivity : AppCompatActivity() {
         } else {
             statusText.text = "無障礙權限：未啟用"
         }
+    }
+
+    private fun runClickSequence(
+        index: Int,
+        service: AutoClickService,
+        statusText: TextView
+    ) {
+        if (index >= clickPoints.size) {
+            statusText.text = "點位清單執行完成"
+            return
+        }
+
+        val point = clickPoints[index]
+
+        val metrics = resources.displayMetrics
+        val width = metrics.widthPixels
+        val height = metrics.heightPixels
+
+        val realX = (point.xRatio * width).toInt()
+        val realY = (point.yRatio * height).toInt()
+
+        statusText.text = "準備執行 ID=${point.id}：delay=${point.delay}ms"
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            statusText.text = "正在點擊 ID=${point.id}：($realX, $realY)"
+
+            service.performClick(realX, realY, point.duration) {
+                runClickSequence(index + 1, service, statusText)
+            }
+        }, point.delay)
     }
 }

@@ -173,6 +173,12 @@
                 android:layout_marginTop="12dp"
                 android:text="測試點擊選定點位" />
 
+            <Button
+                android:id="@+id/runClickSequenceButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="執行點位清單" />
         </LinearLayout>
 
     </LinearLayout>
