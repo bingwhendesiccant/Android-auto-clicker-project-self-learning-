@@ -264,15 +264,6 @@
                 android:layout_weight="1"
                 android:text="停止" />
         </LinearLayout>
-
-        <!-- 如果你已經把單點測試 listener 註解掉，可以暫時保留這顆按鈕，也可以整段刪掉 -->
-        <Button
-            android:id="@+id/testClickSelectedButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="測試點擊選定點位" />
-
     </LinearLayout>
 
 </ScrollView>
