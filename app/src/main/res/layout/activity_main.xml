@@ -166,6 +166,13 @@
                 android:layout_marginTop="8dp"
                 android:text="檢查無障礙權限狀態" />
 
+            <Button
+                android:id="@+id/testClickSelectedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="測試點擊選定點位" />
+
         </LinearLayout>
 
     </LinearLayout>

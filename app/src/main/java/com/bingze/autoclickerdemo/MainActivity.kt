@@ -10,6 +10,8 @@ import org.json.JSONObject
 import android.content.Intent
 import android.provider.Settings
 import android.text.TextUtils
+import android.accessibilityservice.GestureDescription
+import android.graphics.Path
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,6 +48,9 @@ class MainActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.accessibilityStatusText)
         val checkAccessibilityButton =
             findViewById<Button>(R.id.checkAccessibilityButton)
+
+        val testClickSelectedButton =
+            findViewById<Button>(R.id.testClickSelectedButton)
 
         loadClickPoints()
         updateStatus(statusText, listText)
@@ -234,6 +239,37 @@ class MainActivity : AppCompatActivity() {
             updateAccessibilityStatus(accessibilityStatusText)
         }
 
+        testClickSelectedButton.setOnClickListener {
+            if (!isAccessibilityServiceEnabled()) {
+                statusText.text = "請先啟用無障礙權限"
+                return@setOnClickListener
+            }
+
+            if (clickPoints.isEmpty()) {
+                statusText.text = "目前沒有點位可以測試"
+                return@setOnClickListener
+            }
+
+            val service = AutoClickService.instance
+
+            if (service == null) {
+                statusText.text = "無障礙服務尚未連線，請重新開啟服務或重啟 App"
+                return@setOnClickListener
+            }
+
+            val point = clickPoints[selectedPointIndex]
+
+            val metrics = resources.displayMetrics
+            val width = metrics.widthPixels
+            val height = metrics.heightPixels
+
+            val realX = (point.xRatio * width).toInt()
+            val realY = (point.yRatio * height).toInt()
+
+            service.performClick(realX, realY, point.duration)
+
+            statusText.text = "已測試點擊 ID=${point.id}：($realX, $realY)"
+        }
 
     }
     private var selectedPointIndex = 0

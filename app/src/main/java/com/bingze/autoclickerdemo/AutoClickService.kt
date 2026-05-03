@@ -1,9 +1,15 @@
 package com.bingze.autoclickerdemo
 
 import android.accessibilityservice.AccessibilityService
+import android.accessibilityservice.GestureDescription
+import android.graphics.Path
 import android.view.accessibility.AccessibilityEvent
 
 class AutoClickService : AccessibilityService() {
+
+    companion object {
+        var instance: AutoClickService? = null
+    }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         // 目前先不處理事件
@@ -15,6 +21,31 @@ class AutoClickService : AccessibilityService() {
 
     override fun onServiceConnected() {
         super.onServiceConnected()
-        // 服務成功啟用時會呼叫
+        instance = this
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (instance == this) {
+            instance = null
+        }
+    }
+
+    fun performClick(x: Int, y: Int, duration: Long) {
+        val path = Path().apply {
+            moveTo(x.toFloat(), y.toFloat())
+        }
+
+        val gesture = GestureDescription.Builder()
+            .addStroke(
+                GestureDescription.StrokeDescription(
+                    path,
+                    0,
+                    duration
+                )
+            )
+            .build()
+
+        dispatchGesture(gesture, null, null)
     }
 }
