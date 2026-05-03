@@ -118,14 +118,14 @@ Overlay controls and draggable point markers are intentionally postponed to late
 
 Planned next steps include:
 
-Improve UI layout and usability
-Add a clear-all click points feature
-Add better input validation and user feedback
-Support multiple saved scripts
-Add overlay control panel in a later stage
-Add draggable point markers in a later stage
-Support swipe gestures
-Improve handling of screen rotation and different display environments
-Author
+1. Improve UI layout and usability
+2. Add a clear-all click points feature
+3. Add better input validation and user feedback
+4. Support multiple saved scripts
+5. Add overlay control panel in a later stage
+6. Add draggable point markers in a later stage
+7. Support swipe gestures
+8. Improve handling of screen rotation and different display environments
 
+Author
 Developed by bingwhendescicant
